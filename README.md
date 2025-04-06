@@ -12,4 +12,207 @@ is not actually needed. You may first need to execute `chmod +x mvnw`.
 ```
 
 Once the runtime starts, you can access the project at [http://localhost:8080/crm](http://localhost:8080/crm).
+# 📘 CRM API - Documentación de Endpoints
 
+Este repositorio contiene ejemplos prácticos de cómo interactuar con los servicios REST del sistema CRM. Los endpoints están organizados por recurso y acompañados con comandos `cURL` para facilitar las pruebas.
+
+---
+
+## 🔐 Autenticación
+
+### 🧾 Login
+
+Realiza la autenticación con credenciales de usuario.
+
+**Endpoint:**
+```
+POST /crm/api/login
+```
+
+**Content-Type:** `application/x-www-form-urlencoded`
+
+**Parámetros:**
+
+| Nombre   | Tipo     | Requerido | Descripción          |
+|----------|----------|-----------|----------------------|
+| username | string   | ✅        | Nombre de usuario    |
+| password | string   | ✅        | Contraseña del usuario |
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/login' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'username=admin' \
+--data-urlencode 'password=admin'
+```
+
+---
+
+## 👤 Personas
+
+### 📄 Obtener todas las personas
+
+**Endpoint:**
+```
+GET /crm/api/persona
+```
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/persona'
+```
+
+### ➕ Crear prospecto
+
+**Endpoint:**
+```
+POST /crm/api/persona/crearProspecto
+```
+
+**Content-Type:** `application/json`
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/persona/crearProspecto' \
+--header 'Content-Type: application/json' \
+--data '{
+  "infoPersonaDTO": {
+    "identificacion": "1723456789",
+    "nombre": "Carlos",
+    "apellido": "Martínez",
+    "direccion": "Av. Amazonas y NNUU",
+    "estado": "Activo",
+    "razonSocial": "Inversiones CM S.A."
+  }
+}'
+```
+
+---
+
+## 🛡️ Roles
+
+### ➕ Crear nuevo rol
+
+**Endpoint:**
+```
+POST /crm/api/rol/
+```
+
+**Content-Type:** `application/json`
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/rol/' \
+--header 'Content-Type: application/json' \
+--data '{
+  "nombre": "Vendedor",
+  "descripcion": "Gestión de clientes, prospectos y proformas.",
+  "estado": "Activo"
+}'
+```
+
+### 📄 Obtener todos los roles
+
+**Endpoint:**
+```
+GET /crm/api/rol/
+```
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/rol/'
+```
+
+---
+
+## 📦 Productos
+
+### ➕ Crear nuevo producto
+
+**Endpoint:**
+```
+POST /crm/api/producto/
+```
+
+**Content-Type:** `application/json`
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/producto/' \
+--header 'Content-Type: application/json' \
+--data '{
+  "nombre": "Producto A",
+  "descripcion": "Este es un producto de ejemplo",
+  "precio": 49.99,
+  "estado": "Activo"
+}'
+```
+
+---
+
+## 📄 Proformas
+
+### ➕ Crear nueva proforma
+
+**Endpoint:**
+```
+POST /crm/api/proforma/
+```
+
+**Content-Type:** `application/json`
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/proforma/' \
+--header 'Content-Type: application/json' \
+--data '{
+  "proformaCabDTO": {
+    "numero": "PRO-001",
+    "feValidez": "2025-04-06T12:30:00",
+    "condicionPago": "Contado",
+    "formaPago": "Transferencia",
+    "estado": "ACTIVO",
+    "impuesto": 12.0,
+    "descuento": 5.0,
+    "persona": {
+      "idPersona": 1
+    }
+  },
+  "lstProformaDetDTO": [
+    {
+      "producto": {
+        "idProducto": 4
+      },
+      "cantidad": "2",
+      "estado": "Activo"
+    }
+  ]
+}'
+```
+
+### 🔍 Buscar detalles de una proforma
+
+**Endpoint:**
+```
+POST /crm/api/proforma/buscarDet
+```
+
+**Content-Type:** `application/json`
+
+**Ejemplo cURL:**
+```bash
+curl --location 'http://localhost:8080/crm/api/proforma/buscarDet' \
+--header 'Content-Type: application/json' \
+--data '{
+  "proformaCabDTO": {
+    "idProformaCab": "4",
+    "estado": "Activo"
+  }
+}'
+```
+
+---
+
+## 📌 Notas
+
+- Asegúrate de que los IDs usados (persona, producto, proforma) existan en tu base de datos.
